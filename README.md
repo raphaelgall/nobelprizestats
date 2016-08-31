@@ -13,4 +13,5 @@ v 0.2 includes for literature and peace
 *plot Hierarchical clustering of top 5 word groups
 *plot k-means clustering of top 5 groups.
 
-Output in HTML file reporting.HTML
+Full report in HTML
+https://github.com/raphaelgall/nobelprizestats/blob/master/reporting.html
