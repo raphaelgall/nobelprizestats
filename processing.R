@@ -44,7 +44,10 @@ tail(table(freq), 20)
 freq <- colSums(as.matrix(dtms))   
 freq
 freq <- sort(colSums(as.matrix(dtm)), decreasing=TRUE)   
-mostfrequentwords <- head(freq, 15)   
+mostfrequentwords <- head(freq, 25)   
+barplot(mostfrequentwords, las = 2, names.arg = names(mostfrequentwords),
+col ="lightblue", main ="Most frequent words",
+ylab = "Word frequencies")
 
 findFreqTerms(dtm, lowfreq=50) 
 wf    <- data.frame(word=names(freq), freq=freq)   

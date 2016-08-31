@@ -10,7 +10,10 @@ output: html_document
 ```{r literature, cache = TRUE, echo = FALSE}
 source('source.R')
 source('processing.R')
-mostfrequentwords
+barplot(mostfrequentwords, las = 2, names.arg = names(mostfrequentwords),
+col ="lightblue", main ="Most frequent words",
+ylab = "Word frequencies")
+
 frequencyplot
 
 set.seed(142)   
@@ -36,7 +39,10 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 ```{r peace, cache = TRUE, echo = FALSE}
 nobel_literature <- nobel_peace #switch the corpus file. warning: in this instance filename is misleading.
 source('processing.R')
-mostfrequentwords
+barplot(mostfrequentwords, las = 2, names.arg = names(mostfrequentwords),
+col ="lightblue", main ="Most frequent words",
+ylab = "Word frequencies")
+
 frequencyplot
 
 set.seed(142)   
