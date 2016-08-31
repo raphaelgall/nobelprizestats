@@ -88,3 +88,9 @@ fit   <- hclust(d=d, method="ward")
 # switched <- TRUE
 # 
 #}
+
+#Sentiment analysis[edit]
+# Sentiment analysis[edit]
+# Sentiment analysis may involve analysis of movie reviews for estimating how favorable a review is for a movie.[20] Such an analysis may need a labeled data set or labeling of the affectivity of words. Resources for affectivity of words and concepts have been made for WordNet[21] and ConceptNet,[22] respectively.
+# 
+# Text has been used to detect emotions in the related area of affective computing.[23] Text based approaches to affective computing have been used on multiple corpora such as students evaluations, children stories and news stories.
