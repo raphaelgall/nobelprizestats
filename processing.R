@@ -6,52 +6,13 @@
 years          <- seq(1940, 2010, 10)
 frequencies    <- c(1:length(years))
 
-#############Part A: processing peace prize
+#select the most frequent words out of corpus.
 
-#all speeches
-nobel_prize    <- nobel_peace
-
-#preprocessing
-#remove number, capitalisation, common words, puntucation, other meaningless bits.
-nobel_prize  <- tm_map(nobel_prize, removePunctuation)
-nobel_prize  <- tm_map(nobel_prize, removeNumbers)
-nobel_prize  <- tm_map(nobel_prize, tolower)#lowercase
-nobel_prize  <- tm_map(nobel_prize, removeWords, stopwords("english"))
-nobel_prize  <- tm_map(nobel_prize, stemDocument)
-nobel_prize  <- tm_map(nobel_prize, stripWhitespace)
-nobel_prize  <- tm_map(nobel_prize, PlainTextDocument)
-
-#stage the data
-dtm   <- DocumentTermMatrix(nobel_prize)
-tdm   <- TermDocumentMatrix(nobel_prize)
-
-#removing sparse terms
-dtms  <- removeSparseTerms(dtm, 0.1)
-
-#Clustering by Term Similarity
-dtmss <- removeSparseTerms(dtm, 0.15) # This makes a matrix that is only 15% empty space, maximum.
-
-#findFreqTerms(dtms, lowfreq=50)
-freq  <- colSums(as.matrix(dtms))
-freq
-freq  <- sort(colSums(as.matrix(dtm)), decreasing = TRUE)
-wf    <- data.frame(word = names(freq), freq = freq)
-
-#frequencies are key outcome of the pre-processing
-mostfrequentwords               <- wf[1:50,]
-peace_mostfrequentwords15       <- freq[tail(ord)]
-
-##### Sub-analysis for frequencies by decade
-#top 5 peace word frequencies per year
-frequency_war             <- frequencies #red
-frequency_world           <- frequencies #blue
-frequency_peace           <- frequencies #green
-frequency_international   <- frequencies #black
-frequency_one             <- frequencies #white
-
-for (i in 1:length(nobel_peace_bydecade)) {
-  count       <- i
-  nobel_prize <- nobel_peace_bydecade[[count]]
+frequentwordsincorpus <- function (x)
+{
+  
+  #all speeches
+  nobel_prize    <- x
   
   #preprocessing
   #remove number, capitalisation, common words, puntucation, other meaningless bits.
@@ -69,86 +30,90 @@ for (i in 1:length(nobel_peace_bydecade)) {
   
   #removing sparse terms
   dtms  <- removeSparseTerms(dtm, 0.1)
-
+  
+  #Clustering by Term Similarity
+  dtmss <- removeSparseTerms(dtm, 0.15) # This makes a matrix that is only 15% empty space, maximum.
+  
   #findFreqTerms(dtms, lowfreq=50)
   freq  <- colSums(as.matrix(dtms))
   freq
   freq  <- sort(colSums(as.matrix(dtm)), decreasing = TRUE)
   wf    <- data.frame(word = names(freq), freq = freq)
-  mostfrequentwords <- wf[1:50,]
+  
+  #frequencies are key outcome of the pre-processing
+  mostfrequentwords50                <- wf[1:50,]
+  #mostfrequentwords15               <- freq[tail(ord)]
+  
+  return(mostfrequentwords50)
+}
+
+
+
+#############Part A: all sppeches
+
+#all speeches, most frequent words
+peace_mostfrequentwords50      <- frequentwordsincorpus(nobel_peace)
+literature_mostfrequentwords50 <- frequentwordsincorpus(nobel_literature)
+
+
+#############Part B: Sub-analysis for frequencies by decade
+
+#function with top 10 words peace_mostfrequentwords50[1:10, ]
+
+#top 5 peace word frequencies per year
+frequency_peace           <- frequencies #green
+frequency_world           <- frequencies #blue
+frequency_war             <- frequencies #red
+frequency_people          <- frequencies #black
+frequency_one             <- frequencies #white
+
+for (i in 1:length(nobel_peace_bydecade)) {
+  count       <- i
+  nobel_prize <- nobel_peace_bydecade[[count]]
+  
+  mostfrequentwords <- frequentwordsincorpus(nobel_prize)
   
   #create vectors of top 5 most freq words
-  frequency_war[count]            <- mostfrequentwords['war','freq']
-  frequency_world[count]          <- mostfrequentwords['world','freq']
   frequency_peace[count]          <- mostfrequentwords['peace','freq']
-  frequency_international[count]  <- mostfrequentwords['international','freq']
+  frequency_world[count]          <- mostfrequentwords['world','freq']
+  frequency_war[count]            <- mostfrequentwords['war','freq']
+  frequency_people[count]         <- mostfrequentwords['people','freq']
   frequency_one[count]            <- mostfrequentwords['one','freq']
 }
 
 
 #data frames for plotting
-peace_word_frequencies_topfive  <- data.frame(years, frequency_war, frequency_world, frequency_peace, frequency_international, frequency_one)
-peace_frequencies_all           <- data.frame(frequency_war, frequency_world, frequency_peace, frequency_international, frequency_one)
+peace_word_frequencies_topfive  <- data.frame(years, frequency_war, frequency_world, frequency_peace, frequency_people, frequency_one)
+peace_frequencies_all           <- data.frame(frequency_war, frequency_world, frequency_peace, frequency_people, frequency_one)
 
 #scatterplotmatrix 
 peace_relationshipsbetweenwords <- pairs.panels(peace_frequencies_all)
 
 
-
-
-
-
-
-
-#############Part B: processing literature prize
-
-
+#######literature
 #top 5 literature word frequencies per year
-# frequency_war            <- frequencies #red
-# frequency_world          <- frequencies #blue
-# frequency_peace          <- frequencies #green
-# frequency_international  <- frequencies #black
-# frequency_one            <- frequencies #white
-
+frequency_one            <- frequencies #red
+frequency_world          <- frequencies #blue
+frequency_time           <- frequencies #black
+frequency_life           <- frequencies #white
+frequency_people         <- frequencies #orange
 for (i in 1:length(nobel_literature_bydecade)) {
   count       <- i
-  nobel_prize <- nobel_literature_bydecade[[count]]
+  nobel_prize <- nobel_peace_bydecade[[count]]
   
-  #preprocessing
-  #remove number, capitalisation, common words, puntucation, other meaningless bits.
-  nobel_prize  <- tm_map(nobel_prize, removePunctuation)
-  nobel_prize  <- tm_map(nobel_prize, removeNumbers)
-  nobel_prize  <- tm_map(nobel_prize, tolower)#lowercase
-  nobel_prize  <- tm_map(nobel_prize, removeWords, stopwords("english"))
-  nobel_prize  <- tm_map(nobel_prize, stemDocument)
-  nobel_prize  <- tm_map(nobel_prize, stripWhitespace)
-  nobel_prize  <- tm_map(nobel_prize, PlainTextDocument)
-  
-  #stage the data
-  dtm  <- DocumentTermMatrix(nobel_prize)
-  tdm  <- TermDocumentMatrix(nobel_prize)
-  
-  #removing sparse terms
-  dtms <- removeSparseTerms(dtm, 0.1)
-  
-  #findFreqTerms(dtms, lowfreq=50)
-  freq <- colSums(as.matrix(dtms))
-  freq
-  freq <- sort(colSums(as.matrix(dtm)), decreasing = TRUE)
-  wf    <- data.frame(word = names(freq), freq = freq)
-  mostfrequentwords <- wf[1:50,]
-  
+  mostfrequentwords <- frequentwordsincorpus(nobel_prize)
+
   #create vectors of top 5 most freq words
-  frequency_war[count]            <- mostfrequentwords['war','freq']
-  frequency_world[count]          <- mostfrequentwords['world','freq']
-  frequency_peace[count]          <- mostfrequentwords['peace','freq']
-  frequency_international[count]  <- mostfrequentwords['international','freq']
-  frequency_one[count]            <- mostfrequentwords['one','freq']
+  frequency_one[count]          <- mostfrequentwords['one','freq']
+  frequency_world[count]        <- mostfrequentwords['world','freq']
+  frequency_time[count]         <- mostfrequentwords['time','freq']
+  frequency_life[count]         <- mostfrequentwords['life','freq']
+  frequency_people[count]       <- mostfrequentwords['people','freq']
 }
 
 #data frames for plotting
-literature_word_frequencies_topfive  <- data.frame(years, frequency_war, frequency_world, frequency_peace, frequency_international, frequency_one)
-literature_frequencies_all           <- data.frame(frequency_war, frequency_world, frequency_peace, frequency_international, frequency_one)
+literature_word_frequencies_topfive  <- data.frame(years, frequency_one, frequency_world, frequency_time, frequency_life, frequency_people)
+literature_frequencies_all           <- data.frame(frequency_one, frequency_world, frequency_time, frequency_life, frequency_people)
 
 #scatterplotmatrix 
 literature_relationshipsbetweenwords <- pairs.panels(literature_frequencies_all)
