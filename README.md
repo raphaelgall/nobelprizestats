@@ -14,5 +14,10 @@ v 0.2 includes for literature and peace
 *plot Hierarchical clustering of top 5 word groups
 *plot k-means clustering of top 5 groups.
 
+v0.3 includes quantitative sub-analysis for frequencies by decade
+*temporarlity dropped the clustering groups
+*word frequencie plots per decade from 1940 to 2010 of top 5 words for literature and nobel prize 
+*scatterplotmatrix of top 5 words for literature and nobel prize 
+
 Full report in HTML
 https://github.com/raphaelgall/nobelprizestats/blob/master/reporting.html
