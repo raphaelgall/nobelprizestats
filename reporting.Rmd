@@ -39,7 +39,7 @@ nobel_prize    <- nobel_peace
 #most frequent words
 peace_mostfrequentwords50 <- frequentwordsincorpus(nobel_prize)
 # 
-# #wordcloud
+#wordcloud
 # set.seed(142)
 # dark2                  <- brewer.pal(6, "Dark2")
 # peace_wordcloudcolored <- wordcloud(names(peace_mostfrequentwords50), freq, max.words=100, rot.per=0.2, colors=dark2)
@@ -65,9 +65,10 @@ peace_mostfrequentwords50 <- frequentwordsincorpus(nobel_prize)
 # peace_frequencyplot <- frequencyplot + theme(axis.text.x=element_text(angle=45, hjust=1))
 
 ### peace by decade
-peace_word_frequencies_topfive %>% ggvis(~years, ~frequency_war) %>% layer_lines(stroke = 'war') %>% add_axis("x", title = "Importance of words in nobel prize for peace speeches(by decades)")    %>% add_axis("y", title = "Word frequency") %>% layer_paths(y = ~frequency_world, stroke = 'world') %>% layer_paths(y = ~frequency_peace, stroke = 'peace') %>% layer_paths(y = ~frequency_people, stroke = 'people') %>% layer_paths(y = ~frequency_one, stroke = 'one')
+peace_word_frequencies_topfive %>% ggvis(~years, ~peace) %>% layer_lines(stroke = 'peace') %>% add_axis("x", title = "Importance of words in peace nobel prize for peace speeches(by decades)")    %>% add_axis("y", title = "Word frequency") %>% layer_paths(y = ~world, stroke = 'world') %>% layer_paths(y = ~will, stroke = 'will') %>% layer_paths(y = ~war, stroke = 'war') %>% layer_paths(y = ~people, stroke = 'one')
 
-pairs.panels(peace_frequencies_all)
+pairs.panels(peace_word_frequencies_topfive[ , - 6])
+
 ```
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
@@ -97,8 +98,9 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 # clusplot(as.matrix(d), kfit$cluster, color=T, shade=T, labels=2, lines=0)   
 # 
 ### literature by decade
-literature_word_frequencies_topfive %>% ggvis(~years, ~frequency_one) %>% layer_lines(stroke = 'one') %>% add_axis("x", title = "Importance of words in nobel prize for peace speeches(by decades)")    %>% add_axis("y", title = "Word frequency") %>% layer_paths(y = ~frequency_world, stroke = 'world') %>% layer_paths(y = ~frequency_time, stroke = 'time') %>% layer_paths(y = ~frequency_life, stroke = 'life') %>% layer_paths(y = ~frequency_people, stroke = 'people')
+literature_word_frequencies_topfive %>% ggvis(~years, ~one) %>% layer_lines(stroke = 'one') %>% add_axis("x", title = "Importance of words in literature nobel prize for peace speeches(by decades)")    %>% add_axis("y", title = "Word frequency") %>% layer_paths(y = ~world, stroke = 'world') %>% layer_paths(y = ~will, stroke = 'will') %>% layer_paths(y = ~can, stroke = 'can') %>% layer_paths(y = ~time, stroke = 'time')
+str(literature_word_frequencies_topfive)
+pairs.panels(literature_word_frequencies_topfive[ , - 6])
 
-pairs.panels(literature_frequencies_all)
 ```
 
