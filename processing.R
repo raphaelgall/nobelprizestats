@@ -2,11 +2,14 @@
 #explorative analysis, including machine learning, quantitative text analysis.
 #processing and computation
 
+#### min variables for analysis
 #plotting frame for all nobel prizes
 years          <- seq(1940, 2010, 10)
 frequencies    <- c(1:length(years))
 numberofwords  <- 5
 
+
+### key functions used
 #select the most frequent words out of corpus.
 frequentwordsincorpus <- function (x)
 {
@@ -47,68 +50,56 @@ frequentwordsincorpus <- function (x)
   return(mostfrequentwords50)
 }
 
+#matrix with top words x years in decades
+compute_word_frequencies_topfive_byyear <- function (x) {
+  
+  #dataframe empty to be filled
+  word_frequencies_topfive_byyear           <- data.frame(matrix(0, ncol = 8, nrow = length(x)), row.names = x)
+  colnames(word_frequencies_topfive_byyear) <- years
+  
+  #fill datafran
+  for (i in 1:length(nobel_peace_bydecade)) {
+    count       <- i
+    nobel_prize <- nobel_peace_bydecade[[count]]
+    
+    mostfrequentwords <- frequentwordsincorpus(nobel_prize)
+    
+    #create entries of each word(row) for each decade
+    for (j in x) {
+      # count+1 since the first oclumn is the word
+      word_frequencies_topfive_byyear[j, count]     <- mostfrequentwords[j, 'freq']
+    }
+  }
+  #goal is dataframe of frequencies
+  return(word_frequencies_topfive_byyear)
+}
 
+########################  Processing data ###########
 
-#############Part A: all sppeches
-
+#Part A: all speeches
 #all speeches, most frequent words
 peace_mostfrequentwords50      <- frequentwordsincorpus(nobel_peace)
 literature_mostfrequentwords50 <- frequentwordsincorpus(nobel_literature)
 
-#############Part B: Sub-analysis for frequencies by decade
+#Part B: Sub-analysis for frequencies by decade
+#most frequent words for prize overall through whole history
+peace_word_frequencies_topfive        <- as.character(peace_mostfrequentwords50$word[1:numberofwords])
+literature_frequencies_topfive        <- as.character(literature_mostfrequentwords50$word[1:numberofwords])
 
-#function with top 5 words peace_mostfrequentwords50[1:10, ]
-word_frequencies_topfive        <- as.character(peace_mostfrequentwords50$word[1:numberofwords])
+#setup matrices word x decades
+peace_word_by_decades      <- compute_word_frequencies_topfive_byyear(peace_word_frequencies_topfive)
+literature_word_by_decades <- compute_word_frequencies_topfive_byyear(literature_frequencies_topfive)
 
-#dataframe with top5 as rows and frequencies as 
-word_frequencies_topfive_byyear <- data.frame(matrix(0, ncol = 8, nrow = 5), row.names = word_frequencies_topfive)
-colnames(word_frequencies_topfive_byyear) <- years
-
-for (i in 1:length(nobel_peace_bydecade)) {
-  count       <- i
-  nobel_prize <- nobel_peace_bydecade[[count]]
-  
-  mostfrequentwords <- frequentwordsincorpus(nobel_prize)
-
-  #create entries of each word(row) for each decade
-  for (j in word_frequencies_topfive) {
-  # count+1 since the first oclumn is the word
-  word_frequencies_topfive_byyear[j, count]     <- mostfrequentwords[j, 'freq']
-  }
-}
 #dataframe for plotting in ggvis package
-peace_word_frequencies_topfive        <- data.frame(t(word_frequencies_topfive_byyear))
+peace_word_frequencies_topfive        <- data.frame(t(peace_word_by_decades))
 peace_word_frequencies_topfive$years  <- rownames(peace_word_frequencies_topfive)
+peace_column_names                    <- c(names(peace_word_frequencies_topfive))
+literature_word_frequencies_topfive        <- data.frame(t(literature_word_by_decades))
+literature_word_frequencies_topfive$years  <- rownames(literature_word_frequencies_topfive)
+literature_column_names               <- c(names(literature_word_frequencies_topfive))
 
 #scatterplotmatrix, drop the 'years' string
 pairs.panels(peace_word_frequencies_topfive[ , - 6])
-
-########literature
-
-#function with top 5 words peace_mostfrequentwords50[1:10, ]
-word_frequencies_topfive        <- as.character(literature_mostfrequentwords50$word[1:numberofwords])
-
-#dataframe with top5 as rows and frequencies as 
-word_frequencies_topfive_byyear <- data.frame(matrix(0, ncol = 8, nrow = 5), row.names = word_frequencies_topfive)
-colnames(word_frequencies_topfive_byyear) <- years
-
-for (i in 1:length(nobel_peace_bydecade)) {
-  count       <- i
-  nobel_prize <- nobel_peace_bydecade[[count]]
-  
-  mostfrequentwords <- frequentwordsincorpus(nobel_prize)
-  
-  #create entries of each word(row) for each decade
-  for (j in word_frequencies_topfive) {
-    # count+1 since the first oclumn is the word
-    word_frequencies_topfive_byyear[j, count]     <- mostfrequentwords[j, 'freq']
-  }
-}
-#dataframe  for plotting in ggvis package
-literature_word_frequencies_topfive        <- data.frame(t(word_frequencies_topfive_byyear))
-literature_word_frequencies_topfive$years  <- rownames(literature_word_frequencies_topfive)
-
-#scatterplotmatrix, drop the 'years' string
 pairs.panels(literature_word_frequencies_topfive[ , - 6])
 
 
