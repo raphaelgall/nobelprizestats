@@ -81,3 +81,4 @@ nobel_literature_bydecade <- list(
   nobel_literature_2000,
   nobel_literature_2010
 )
+

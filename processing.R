@@ -25,8 +25,8 @@ frequentwordsincorpus <- function (x)
   nobel_prize  <- tm_map(nobel_prize, removeWords, stopwords("english"))
   nobel_prize  <- tm_map(nobel_prize, stemDocument)
   nobel_prize  <- tm_map(nobel_prize, stripWhitespace)
-  nobel_prize  <- tm_map(nobel_prize, PlainTextDocument)
-  
+ # nobel_prize  <- tm_map(nobel_prize, PlainTextDocument)
+ 
   #stage the data
   dtm   <- DocumentTermMatrix(nobel_prize)
   tdm   <- TermDocumentMatrix(nobel_prize)
@@ -122,5 +122,7 @@ pairs.panels(literature_word_frequencies_topfive[ , - 6])
 #### Plotting all 
 
 #plot
+peace_word_frequencies_topfive %>% ggvis(~years, ~peace_word_frequencies_topfive[ , 1]) %>% layer_lines(stroke = literature_column_names[1]) %>% add_axis("x", title = "Importance of words in peace nobel prize for peace speeches(by decades)") %>% add_axis("y", title = "Word frequency") %>% layer_paths(y = ~peace_word_frequencies_topfive[ , 2], stroke = literature_column_names[2]) %>% layer_paths(y = ~peace_word_frequencies_topfive[ , 3], stroke = literature_column_names[3]) %>% layer_paths(y = ~peace_word_frequencies_topfive[ , 4], stroke = literature_column_names[4]) %>% layer_paths(y = ~peace_word_frequencies_topfive[ , 5], stroke = literature_column_names[5])
 
+pairs.panels(peace_word_frequencies_topfive[ , - 6])
 
